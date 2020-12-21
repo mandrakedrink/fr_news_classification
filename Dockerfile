@@ -1,11 +1,15 @@
 FROM python:3.8-slim
-RUN mkdir /app
-WORKDIR /app
 
-ADD requirements.txt .
+RUN apt-get update && apt-get install -y python3-dev build-essential
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
-ADD . .
+COPY . .
 
-EXPOSE 80
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+EXPOSE 5000
+
+CMD ["uvicorn", "--host", "0.0.0.0", "--port", "5000", "main:app"]
